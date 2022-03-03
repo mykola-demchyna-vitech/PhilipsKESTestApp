@@ -1,0 +1,70 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+
+    maven { url "https://nexus-binrepo.sapphirepri.com/nexus/content/repositories/sapphireInfra"
+        credentials {
+            username nexusUsername
+            password nexusPassword
+        }
+    }
+
+    maven { url "https://nexus-binrepo.sapphirepri.com/nexus/content/repositories/clients"
+        credentials {
+            username nexusUsername
+            password nexusPassword
+        }
+    }
+
+    maven { url "https://nexus-binrepo.sapphirepri.com/nexus/content/repositories/confluent"
+        credentials {
+            username nexusUsername
+            password nexusPassword
+        }
+    }
+}
+
+ext {
+    set('springCloudVersion', "2021.0.1")
+}
+
+dependencies {
+
+    implementation group: 'com.philips.sapphire.infrastructure', name: 'kes-synchronous-producer', version: '3.0.21144.145537'
+    implementation group: 'com.philips.sapphire.infrastructure', name: 'logger-spring-module', version: '2.2.21108.013106'
+    implementation group: 'com.philips.sapphire.infrastructure', name: 'request-trace-storage', version: '2.1.21039.033759'
+
+    implementation group: 'com.philips.sapphire.canonicalmodels.avro', name: 'contracts', version: '1.12.21270.203835'
+
+    implementation 'com.newrelic.agent.java:newrelic-api:7.4.3'
+
+
+
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-config:3.1.1'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:3.1.1'
+    implementation 'org.springframework.cloud:spring-cloud-starter-eureka:1.4.7.RELEASE'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
